@@ -1,17 +1,23 @@
 import { useState } from "react";
 
-import { Canvas, type Line, type Point } from "./components/canvas";
+import { useLinearRegression } from "@/hooks/use-linear-regression";
+
+import { Canvas, type Point } from "./components/canvas";
 
 export function App() {
-  const [points, setPoints] = useState<Point[]>([{ x: 0, y: 0 }]);
+  const [points, setPoints] = useState<Point[]>([]);
 
-  const [lines, setLines] = useState<Line[]>([{ from: { x: 0, y: 0 }, to: { x: 1, y: 1 } }]);
+  const { tensors, line } = useLinearRegression({ learningRate: 0.01, points });
 
   return (
-    <main className="flex h-svh w-svw items-center justify-center">
+    <main className="flex h-svh w-svw flex-col items-center justify-center gap-4">
+      <span>
+        <b>Tensors Used: </b> {tensors}
+      </span>
+      <button onClick={() => setPoints([])}>Reset</button>
       <Canvas
         points={points}
-        lines={lines}
+        lines={line ? [line] : []}
         onClick={(point) => {
           setPoints((prev) => [...prev, point]);
         }}
