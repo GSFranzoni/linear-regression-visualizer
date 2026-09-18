@@ -9,6 +9,16 @@ export function App() {
 
   const { tensors, line } = useLinearRegression({ learningRate: 0.01, points });
 
+  const addPoint = (point: Point) => {
+    setPoints((previous) => [...previous, point]);
+  };
+
+  const updatePoint = (index: number, point: Point) => {
+    setPoints((previous) =>
+      previous.map((current, currentIndex) => (currentIndex === index ? point : current)),
+    );
+  };
+
   return (
     <main className="flex h-svh w-svw flex-col items-center justify-center gap-4">
       <span>
@@ -18,9 +28,8 @@ export function App() {
       <Canvas
         points={points}
         lines={line ? [line] : []}
-        onClick={(point) => {
-          setPoints((prev) => [...prev, point]);
-        }}
+        onClick={addPoint}
+        onPointChange={updatePoint}
       />
     </main>
   );
