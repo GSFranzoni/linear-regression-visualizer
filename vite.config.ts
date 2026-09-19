@@ -1,8 +1,9 @@
-import babel from '@rolldown/plugin-babel';
-import tailwindcss from '@tailwindcss/vite';
-import react, { reactCompilerPreset } from '@vitejs/plugin-react';
-import { fileURLToPath } from 'url';
-import { defineConfig } from 'vite';
+import { fileURLToPath } from "url";
+
+import babel from "@rolldown/plugin-babel";
+import tailwindcss from "@tailwindcss/vite";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 const getBase = () => {
   const repositoryName = process.env.GITHUB_REPOSITORY?.split("/")[1];
