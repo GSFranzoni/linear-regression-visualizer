@@ -1,14 +1,16 @@
-import { Group, Layer, Line as KonvaLine, Rect, Text } from "react-konva";
+import { Arrow, Group, Line as KonvaLine, Layer, Rect, Text } from "react-konva";
 
 import type { CanvasScales } from "./plot";
 import type { Plot } from "./types";
+
+const AXIS_EXTENSION = 8;
 
 type Props = {
   size: number;
   plot: Plot;
   scales: CanvasScales;
   ticks: number[];
-  colors: { background: string; border: string; mutedForeground: string };
+  colors: { background: string; border: string; mutedForeground: string; destructive: string };
 };
 
 export const CanvasGrid = ({ size, plot, scales, ticks, colors }: Props) => (
@@ -53,6 +55,20 @@ export const CanvasGrid = ({ size, plot, scales, ticks, colors }: Props) => (
         />
       </Group>
     ))}
+    <Arrow
+      points={[plot.left - AXIS_EXTENSION, plot.bottom, plot.right + AXIS_EXTENSION, plot.bottom]}
+      stroke={colors.mutedForeground}
+      fill={colors.mutedForeground}
+      pointerLength={8}
+      pointerWidth={8}
+    />
+    <Arrow
+      points={[plot.left, plot.bottom + AXIS_EXTENSION, plot.left, plot.top - AXIS_EXTENSION]}
+      stroke={colors.mutedForeground}
+      fill={colors.mutedForeground}
+      pointerLength={8}
+      pointerWidth={8}
+    />
     <Text
       x={plot.left}
       y={size - 20}

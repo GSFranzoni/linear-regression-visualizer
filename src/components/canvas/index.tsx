@@ -16,6 +16,7 @@ type Props = {
   lines: Line[];
   onClick: (point: Point) => unknown;
   onPointChange?: (index: number, point: Point) => unknown;
+  disabled?: boolean;
 };
 
 const getCssVariable = (name: string) =>
@@ -25,11 +26,12 @@ const colors = {
   background: getCssVariable("--background"),
   border: getCssVariable("--border"),
   mutedForeground: getCssVariable("--muted-foreground"),
+  destructive: getCssVariable("--destructive"),
   regressionLine: getCssVariable("--regression-line"),
   dataPoint: getCssVariable("--data-point"),
 };
 
-export const Canvas = ({ points, lines, onClick, onPointChange }: Props) => {
+export const Canvas = ({ points, lines, onClick, onPointChange, disabled = false }: Props) => {
   const { containerRef, size } = useCanvasSize();
 
   const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
@@ -42,6 +44,9 @@ export const Canvas = ({ points, lines, onClick, onPointChange }: Props) => {
 
   const addPoint = useCallback(
     (position: Point | null) => {
+      if (disabled) {
+        return;
+      }
       if (
         !position ||
         position.x < plot.left ||
@@ -54,7 +59,7 @@ export const Canvas = ({ points, lines, onClick, onPointChange }: Props) => {
 
       onClick({ x: scales.x.invert(position.x), y: scales.y.invert(position.y) });
     },
-    [onClick, plot, scales],
+    [disabled, onClick, plot, scales],
   );
 
   const invertX = useCallback(
@@ -68,7 +73,7 @@ export const Canvas = ({ points, lines, onClick, onPointChange }: Props) => {
   );
 
   return (
-    <div ref={containerRef} aria-label="Linear regression plot">
+    <div ref={containerRef} className="w-full" aria-label="Linear regression plot">
       <Stage
         width={size}
         height={size}
@@ -86,10 +91,12 @@ export const Canvas = ({ points, lines, onClick, onPointChange }: Props) => {
                 x={scales.x(point.x) - plot.left}
                 y={scales.y(point.y) - plot.top}
                 hovered={hoveredPoint === index}
+                left={plot.left}
+                top={plot.top}
                 width={plot.width}
                 height={plot.height}
                 onHover={setHoveredPoint}
-                onPointChange={onPointChange}
+                onPointChange={disabled ? undefined : onPointChange}
                 invertX={invertX}
                 invertY={invertY}
                 color={colors.dataPoint}

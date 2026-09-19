@@ -9,6 +9,8 @@ type Props = {
   x: number;
   y: number;
   hovered: boolean;
+  left: number;
+  top: number;
   width: number;
   height: number;
   onHover: (index: number | null) => void;
@@ -24,6 +26,8 @@ export const PlotPoint = memo(function PlotPoint({
   x,
   y,
   hovered,
+  left,
+  top,
   width,
   height,
   onHover,
@@ -39,8 +43,8 @@ export const PlotPoint = memo(function PlotPoint({
       y={y}
       draggable={Boolean(onPointChange)}
       dragBoundFunc={(position) => ({
-        x: clamp(position.x, 0, width),
-        y: clamp(position.y, 0, height),
+        x: clamp(position.x, left, left + width),
+        y: clamp(position.y, top, top + height),
       })}
       onClick={(event) => {
         event.cancelBubble = true;

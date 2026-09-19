@@ -6,7 +6,7 @@ import { App } from "./app";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider>
+    <ThemeProvider attribute="class" defaultTheme="light">
       <App />
     </ThemeProvider>
   </StrictMode>,
