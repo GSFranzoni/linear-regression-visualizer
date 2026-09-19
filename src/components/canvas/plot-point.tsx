@@ -37,6 +37,13 @@ export const PlotPoint = memo(function PlotPoint({
   color,
   strokeColor,
 }: Props) {
+  const updatePoint = (position: { x: number; y: number }) => {
+    onPointChange?.(index, {
+      x: clamp(invertX(position.x), 0, 1),
+      y: clamp(invertY(position.y), 0, 1),
+    });
+  };
+
   return (
     <Group
       x={x}
@@ -64,14 +71,14 @@ export const PlotPoint = memo(function PlotPoint({
         event.cancelBubble = true;
         event.target.getStage()?.container().style.setProperty("cursor", "grabbing");
       }}
+      onDragMove={(event) => {
+        event.cancelBubble = true;
+        updatePoint(event.target.position());
+      }}
       onDragEnd={(event) => {
         event.cancelBubble = true;
         event.target.getStage()?.container().style.setProperty("cursor", "grab");
-        const position = event.target.position();
-        onPointChange?.(index, {
-          x: clamp(invertX(position.x), 0, 1),
-          y: clamp(invertY(position.y), 0, 1),
-        });
+        updatePoint(event.target.position());
       }}
     >
       <Circle radius={hovered ? 8 : 6} fill={color} opacity={hovered ? 0.16 : 0.1} />

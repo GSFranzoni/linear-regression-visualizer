@@ -1,13 +1,13 @@
 import { useCallback, useMemo, useState } from "react";
 import { Group, Layer, Stage } from "react-konva";
 
-import { useCanvasSize } from "@/hooks/use-canvas-size";
-
 import { CanvasGrid } from "@/components/canvas/canvas-grid";
 import { createScales, getPlot, TICK_COUNT } from "@/components/canvas/plot";
 import { PlotPoint } from "@/components/canvas/plot-point";
 import { RegressionLine } from "@/components/canvas/regression-line";
+import { ResidualLines } from "@/components/canvas/residual-lines";
 import type { Line, Point } from "@/components/canvas/types";
+import { useCanvasSize } from "@/hooks/use-canvas-size";
 
 export type { Line, Point } from "./types";
 
@@ -84,13 +84,21 @@ export const Canvas = ({ points, lines, onClick, onPointChange, disabled = false
         <Layer listening={false}>
           <Group x={plot.left} y={plot.top} clipWidth={plot.width} clipHeight={plot.height}>
             {lines.map((line, index) => (
-              <RegressionLine
-                key={index}
-                line={line}
-                plot={plot}
-                scales={scales}
-                color={colors.regressionLine}
-              />
+              <Group key={index}>
+                <ResidualLines
+                  points={points}
+                  line={line}
+                  plot={plot}
+                  scales={scales}
+                  color={colors.regressionLine}
+                />
+                <RegressionLine
+                  line={line}
+                  plot={plot}
+                  scales={scales}
+                  color={colors.regressionLine}
+                />
+              </Group>
             ))}
           </Group>
         </Layer>
@@ -98,7 +106,7 @@ export const Canvas = ({ points, lines, onClick, onPointChange, disabled = false
           <Group x={plot.left} y={plot.top}>
             {points.map((point, index) => (
               <PlotPoint
-                key={`${point.x}-${point.y}-${index}`}
+                key={index}
                 index={index}
                 x={scales.x(point.x) - plot.left}
                 y={scales.y(point.y) - plot.top}
