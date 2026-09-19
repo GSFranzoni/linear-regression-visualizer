@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { Circle, Group } from "react-konva";
 
-import { clamp } from "./plot";
-import type { Point } from "./types";
+import { clamp } from "@/components/canvas/plot";
+import type { Point } from "@/components/canvas/types";
 
 type Props = {
   index: number;

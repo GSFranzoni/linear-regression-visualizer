@@ -1,6 +1,6 @@
 import { d3 } from "@/lib/d3";
 
-import type { Plot } from "./types";
+import type { Plot } from "@/components/canvas/types";
 
 export const TICK_COUNT = 5;
 

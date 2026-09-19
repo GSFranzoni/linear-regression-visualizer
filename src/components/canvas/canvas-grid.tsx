@@ -1,7 +1,7 @@
 import { Arrow, Group, Line as KonvaLine, Layer, Rect, Text } from "react-konva";
 
-import type { CanvasScales } from "./plot";
-import type { Plot } from "./types";
+import type { CanvasScales } from "@/components/canvas/plot";
+import type { Plot } from "@/components/canvas/types";
 
 const AXIS_EXTENSION = 8;
 

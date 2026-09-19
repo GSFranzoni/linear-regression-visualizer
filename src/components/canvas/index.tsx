@@ -3,11 +3,11 @@ import { Group, Layer, Stage } from "react-konva";
 
 import { useCanvasSize } from "@/hooks/use-canvas-size";
 
-import { CanvasGrid } from "./canvas-grid";
-import { createScales, getPlot, TICK_COUNT } from "./plot";
-import { PlotPoint } from "./plot-point";
-import { RegressionLines } from "./regression-lines";
-import type { Line, Point } from "./types";
+import { CanvasGrid } from "@/components/canvas/canvas-grid";
+import { createScales, getPlot, TICK_COUNT } from "@/components/canvas/plot";
+import { PlotPoint } from "@/components/canvas/plot-point";
+import { RegressionLine } from "@/components/canvas/regression-line";
+import type { Line, Point } from "@/components/canvas/types";
 
 export type { Line, Point } from "./types";
 
@@ -81,7 +81,19 @@ export const Canvas = ({ points, lines, onClick, onPointChange, disabled = false
         onTap={(event) => addPoint(event.target.getStage()?.getPointerPosition() ?? null)}
       >
         <CanvasGrid size={size} plot={plot} scales={scales} ticks={ticks} colors={colors} />
-        <RegressionLines lines={lines} plot={plot} scales={scales} color={colors.regressionLine} />
+        <Layer listening={false}>
+          <Group x={plot.left} y={plot.top} clipWidth={plot.width} clipHeight={plot.height}>
+            {lines.map((line, index) => (
+              <RegressionLine
+                key={index}
+                line={line}
+                plot={plot}
+                scales={scales}
+                color={colors.regressionLine}
+              />
+            ))}
+          </Group>
+        </Layer>
         <Layer>
           <Group x={plot.left} y={plot.top}>
             {points.map((point, index) => (
